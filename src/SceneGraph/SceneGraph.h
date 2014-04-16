@@ -6,6 +6,7 @@
 namespace sg {
 
 class GroupNode;
+class CameraNode;
 
 class SceneGraph
 {
@@ -14,15 +15,16 @@ public:
 	~SceneGraph();
 
 	GroupNode* root();
+	CameraNode* camera();
 
 	void renderInit();
 	void render();
 	void resizeViewport(unsigned int width, unsigned int height);
 
 private:
-	
-
 	GroupNode* m_root;
+	CameraNode* m_camera;
+
 	Renderer m_renderer;
 };
 

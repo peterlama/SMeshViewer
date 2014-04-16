@@ -6,6 +6,8 @@
 
 #include <GL/glew.h>
 
+#include <glm/mat4x4.hpp>
+
 #include "GenericDataArray.h"
 #include "ShaderProgramGL.h"
 
@@ -38,7 +40,9 @@ public:
     void setVertices(const GenericDataArray<float>* vertices);
 	void setIndices(const GenericDataArray<unsigned int>* indices);
 	void setShaderProgram(GLuint programHandle);
-	
+	void setProjectionMatrix(const glm::mat4& matrix);
+	void setViewMatrix(const glm::mat4& matrix);
+
 	void init();
 	void resizeViewport(unsigned int width, unsigned int height);
 	void clearScreen();
@@ -49,6 +53,10 @@ private:
 	bool cacheHasEntry(int key);
 	RenderStateSet& cacheGet(int key);
 	void cacheAdd(int key, const RenderStateSet& value);
+
+	glm::mat4 m_viewMatrix;
+	glm::mat4 m_projectionMatrix;
+	GLuint m_mvpMatrixHandle;
 
 	ShaderProgramGL m_defaultShaderProgram;
 

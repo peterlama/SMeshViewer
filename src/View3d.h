@@ -7,6 +7,7 @@
 
 #include "GenericDataArray.h"
 #include "SceneGraph.h"
+#include "ViewNavigator.h"
 
 class Mesh;
 
@@ -24,12 +25,17 @@ protected:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+	void mouseMoveEvent(QMouseEvent* event);
+	void mousePressEvent(QMouseEvent* event);
+	void wheelEvent(QWheelEvent* event);
     
 private:
 	void setupSceneGraph();
 	void updateSceneGraph();
 
 	void createBuffers();
+
+	ViewNavigator m_viewNav;
 
 	sg::SceneGraph m_sceneGraph;
 

@@ -4,7 +4,8 @@ include_directories(
 	${CMAKE_CURRENT_SOURCE_DIR}/SceneGraph
 )
 
-set(SCENEGRAPH_SOURCES 
+set(SCENEGRAPH_SOURCES
+    SceneGraph/CameraNode.cpp 
     SceneGraph/DrawMethodNode.cpp
     SceneGraph/GeometryNode.cpp
     SceneGraph/GroupNode.cpp
@@ -18,6 +19,7 @@ set(SCENEGRAPH_SOURCES
 )
 
 set(SCENEGRAPH_HEADERS
+    SceneGraph/CameraNode.h
     SceneGraph/DrawMethodNode.h
     SceneGraph/GeometryNode.h
     SceneGraph/GroupNode.h
@@ -44,6 +46,8 @@ set(SOURCES
     Mesh.h
     View3d.cpp
     View3d.h
+	ViewNavigator.cpp
+	ViewNavigator.h
 )
 
 add_executable(SMeshViewer ${SOURCES})

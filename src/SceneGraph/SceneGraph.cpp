@@ -1,4 +1,5 @@
 #include "GroupNode.h"
+#include "CameraNode.h"
 #include "SceneGraph.h"
 
 namespace sg {
@@ -6,6 +7,9 @@ namespace sg {
 SceneGraph::SceneGraph()
 {
 	m_root = new GroupNode;
+	m_camera = new CameraNode;
+
+	m_root->addChild(m_camera);
 }
 
 SceneGraph::~SceneGraph()
@@ -16,6 +20,11 @@ SceneGraph::~SceneGraph()
 GroupNode* SceneGraph::root()
 {
 	return m_root;
+}
+
+CameraNode* SceneGraph::camera()
+{
+	return m_camera;
 }
 
 void SceneGraph::renderInit()

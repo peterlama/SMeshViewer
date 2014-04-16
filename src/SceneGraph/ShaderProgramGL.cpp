@@ -5,19 +5,12 @@
 
 namespace sg {
 
-const char* defaultVertexShaderAttrs = "#version 330\n"
-    "layout(location = 0) in vec3 position;\n"
-;
-
-const char* defaultFragmentShaderAttrs = "#version 330\n"
-    "out vec4 outputColor;\n"
-;
-
 const char* defaultVertexShader = "#version 330\n"
     "layout(location = 0) in vec3 position;\n"
+	"uniform mat4 mvpMatrix;\n"
 	"void main()\n"
 	"{\n"
-	"    gl_Position = vec4(position, 1.0);\n"
+	"    gl_Position = mvpMatrix * vec4(position, 1.0);\n"
 	"}\n"
 ;
 

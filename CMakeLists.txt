@@ -11,4 +11,6 @@ find_library(GLEW_LIBRARY glew32.lib
     HINTS "$ENV{VS120COMNTOOLS}/../../VC/lib"
 )
 
+include_directories(${CMAKE_SOURCE_DIR}/glm)
+
 add_subdirectory(src)

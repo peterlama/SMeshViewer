@@ -10,6 +10,7 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include <QDebug>
+#include <QMouseEvent>
 
 #include "View3d.h"
 #include "Mesh.h"
@@ -19,9 +20,10 @@
 #include "VertexNode.h"
 #include "IndexNode.h"
 #include "DrawMethodNode.h"
+#include "CameraNode.h"
 
 View3d::View3d(const QGLFormat &format, QWidget *parent)
-    : QGLWidget(format, parent)
+    : QGLWidget(format, parent), m_viewNav(3.0f, 0.0f, 45.0f)
 {
     //OpenGL context needs to be set up before initializing glew
     makeCurrent();
@@ -33,6 +35,8 @@ View3d::View3d(const QGLFormat &format, QWidget *parent)
 	}
 
 	importObjMesh("C:\\Users\\Peter\\test_square.obj");
+
+	//m_viewNav.setDefaultDistance(5.0f);
 }
 
 View3d::~View3d()
@@ -120,12 +124,44 @@ void View3d::initializeGL()
 
 void View3d::paintGL()
 {
+	updateSceneGraph();
 	m_sceneGraph.render();
 }
 
 void View3d::resizeGL(int width, int height)
 {
 	m_sceneGraph.resizeViewport(width, height);
+}
+
+void View3d::mousePressEvent(QMouseEvent* event)
+{
+	if (event->button() == Qt::LeftButton) {
+		m_viewNav.setStartPixel(event->pos().x(), event->pos().y());
+	}
+}
+
+void View3d::mouseMoveEvent(QMouseEvent* event)
+{
+	if ((event->buttons() & Qt::LeftButton) && rect().contains(event->pos())) {
+		m_viewNav.rotate(event->pos().x(), event->pos().y());
+		//updateSceneGraph();
+		updateGL();
+	}
+	else {
+		event->ignore();
+	}
+}
+
+void View3d::wheelEvent(QWheelEvent *event)
+{
+	if (event->orientation() == Qt::Vertical) {
+		m_viewNav.zoom(event->delta() / -120);
+		//updateSceneGraph();
+		updateGL();
+	}
+	else {
+		event->ignore();
+	}
 }
 
 void View3d::setupSceneGraph()
@@ -141,6 +177,14 @@ void View3d::setupSceneGraph()
 		geom->addChild(new sg::IndexNode(m_indexBuffers[mesh->id()]));
 		root->addChild(geom);
 	}
+}
+
+
+void View3d::updateSceneGraph()
+{
+	m_sceneGraph.camera()->setOrigin(m_viewNav.origin());
+	m_sceneGraph.camera()->setPosition(m_viewNav.position());
+	m_sceneGraph.camera()->setRotation(m_viewNav.rotation());
 }
 
 void View3d::createBuffers()

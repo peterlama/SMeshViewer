@@ -1,5 +1,9 @@
-#include "Renderer.h"
 #include <iostream>
+
+#include <glm/gtc/type_ptr.hpp>
+
+#include "Renderer.h"
+
 
 namespace sg {
 
@@ -87,6 +91,16 @@ void Renderer::setShaderProgram(GLuint programHandle)
 	m_renderState.top().programHandle = programHandle;
 }
 
+void Renderer::setProjectionMatrix(const glm::mat4& matrix)
+{
+	m_projectionMatrix = matrix;
+}
+
+void Renderer::setViewMatrix(const glm::mat4& matrix)
+{
+	m_viewMatrix = matrix;
+}
+
 void Renderer::init()
 {
 	GLuint vao;
@@ -103,6 +117,9 @@ void Renderer::init()
 	glDepthRange(0.0f, 1.0f);
 
 	m_defaultShaderProgram.build();
+
+	m_mvpMatrixHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "mvpMatrix");
+
 }
 
 void Renderer::resizeViewport(unsigned int width, unsigned int height)
@@ -121,6 +138,8 @@ void Renderer::renderTriangles()
 	RenderStateSet stateSet = m_renderState.top();
 
 	glUseProgram(m_defaultShaderProgram.handle());
+
+	glUniformMatrix4fv(m_mvpMatrixHandle, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix * m_viewMatrix));
 
 	glBindBuffer(GL_ARRAY_BUFFER, stateSet.vertexBufferHandle);
     glEnableVertexAttribArray(0);
