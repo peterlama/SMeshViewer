@@ -20,8 +20,10 @@ public:
 	int nodeId;
 	bool indexedDraw;
 	int numVertices;
+	int numNormals;
 	int numIndices;
     GLuint vertexBufferHandle;
+	GLuint normalBufferHandle;
     GLuint indexBufferHandle;
 	GLuint programHandle;
 };
@@ -38,6 +40,7 @@ public:
 
 	void setIndexedDrawing(bool indexedDraw);
     void setVertices(const GenericDataArray<float>* vertices);
+	void setNormals(const GenericDataArray<float>* normals);
 	void setIndices(const GenericDataArray<unsigned int>* indices);
 	void setShaderProgram(GLuint programHandle);
 	void setProjectionMatrix(const glm::mat4& matrix);
@@ -56,7 +59,12 @@ private:
 
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
+
 	GLuint m_mvpMatrixHandle;
+	GLuint m_normalMatrixHandle;
+	GLuint m_diffuseColorHandle;
+	GLuint m_lightIntensityHandle;
+	GLuint m_lightDirectionHandle;
 
 	ShaderProgramGL m_defaultShaderProgram;
 

@@ -41,5 +41,6 @@ private:
 
     std::vector<Mesh*> m_meshes;
 	std::map<unsigned int, GenericDataArray<float>* > m_vertexBuffers;
+	std::map<unsigned int, GenericDataArray<float>* > m_normalBuffers;
 	std::map<unsigned int, GenericDataArray<unsigned int>* > m_indexBuffers;
 };

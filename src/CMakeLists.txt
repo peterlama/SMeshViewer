@@ -11,6 +11,7 @@ set(SCENEGRAPH_SOURCES
     SceneGraph/GroupNode.cpp
     SceneGraph/IndexNode.cpp
     SceneGraph/Node.cpp
+	SceneGraph/NormalNode.cpp
     SceneGraph/Renderer.cpp
 	SceneGraph/SceneGraph.cpp
     SceneGraph/ShaderNode.cpp
@@ -25,6 +26,7 @@ set(SCENEGRAPH_HEADERS
     SceneGraph/GroupNode.h
     SceneGraph/IndexNode.h
     SceneGraph/Node.h
+	SceneGraph/NormalNode.h
     SceneGraph/Renderer.h
 	SceneGraph/SceneGraph.h
     SceneGraph/ShaderNode.h

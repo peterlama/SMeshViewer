@@ -7,18 +7,28 @@ namespace sg {
 
 const char* defaultVertexShader = "#version 330\n"
     "layout(location = 0) in vec3 position;\n"
+	"layout(location = 1) in vec3 normal;\n"
+	"uniform vec4 diffuseColor;\n"
+	"uniform vec4 lightIntensity;\n"
+	"uniform vec3 lightDirection;\n"
 	"uniform mat4 mvpMatrix;\n"
+	"uniform mat3 normalMatrix;\n"
+	"smooth out vec4 color;\n"
 	"void main()\n"
 	"{\n"
 	"    gl_Position = mvpMatrix * vec4(position, 1.0);\n"
+	"    vec3 normCamSpace = normalize(normalMatrix * normal);\n"
+    "    float angleIncidence = clamp(dot(normCamSpace, -lightDirection), 0, 1);\n"
+    "    color = lightIntensity * diffuseColor * angleIncidence;\n"
 	"}\n"
 ;
 
 const char* defaultFragmentShader = "#version 330\n"
+    "smooth in vec4 color;\n"
     "out vec4 outputColor;\n"
     "void main()\n"
     "{\n"
-    "    outputColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);\n"
+    "    outputColor = color;\n"
     "}\n"
 ;
 

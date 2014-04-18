@@ -1,6 +1,10 @@
 #include <iostream>
 
+#include <glm/mat3x3.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Renderer.h"
 
@@ -8,7 +12,7 @@
 namespace sg {
 
 RenderStateSet::RenderStateSet()
-    : nodeId(0), indexedDraw(true), numVertices(0), numIndices(0), vertexBufferHandle(0), indexBufferHandle(0)
+    : nodeId(0), indexedDraw(true), numVertices(0), numNormals(0), numIndices(0), vertexBufferHandle(0), indexBufferHandle(0), normalBufferHandle(0)
 {
 }
 
@@ -65,6 +69,19 @@ void Renderer::setVertices(const GenericDataArray<float>* vertices)
     }
 }
 
+void Renderer::setNormals(const GenericDataArray<float>* normals)
+{
+	if (m_renderState.top().normalBufferHandle != 0) {
+		glBindBuffer(GL_ARRAY_BUFFER, m_renderState.top().vertexBufferHandle);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, normals->byteSize(), normals->data());
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	else {
+		m_renderState.top().numNormals = normals->length();
+		m_renderState.top().normalBufferHandle = uploadVertices(normals);
+	}
+}
+
 void Renderer::setIndices(const GenericDataArray<unsigned int>* indices)
 {
 	if (m_renderState.top().indexBufferHandle != 0) {
@@ -107,9 +124,9 @@ void Renderer::init()
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
+	//glFrontFace(GL_CCW);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthMask(GL_TRUE);
@@ -119,6 +136,10 @@ void Renderer::init()
 	m_defaultShaderProgram.build();
 
 	m_mvpMatrixHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "mvpMatrix");
+	m_normalMatrixHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "normalMatrix");
+	m_diffuseColorHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "diffuseColor");
+	m_lightIntensityHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "lightIntensity");
+	m_lightDirectionHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "lightDirection");
 
 }
 
@@ -140,10 +161,24 @@ void Renderer::renderTriangles()
 	glUseProgram(m_defaultShaderProgram.handle());
 
 	glUniformMatrix4fv(m_mvpMatrixHandle, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix * m_viewMatrix));
+	glm::mat3 normalMatrix(m_viewMatrix);
+	glUniformMatrix3fv(m_normalMatrixHandle, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+	glUniform4f(m_diffuseColorHandle, 0.8f, 0.8f, 0.8f, 1.0f);
+	glUniform4f(m_lightIntensityHandle, 1.0f, 1.0f, 1.0f, 1.0f);
 
+	glm::mat4 lightRot = glm::rotate(glm::mat4(), -45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::vec4 lightDir(0.0f, 0.0f, -1.0f, 0.0);
+	lightDir = lightRot * lightDir;
+
+	glUniform3f(m_lightDirectionHandle, lightDir.x, lightDir.y, lightDir.z);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, stateSet.vertexBufferHandle);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, stateSet.normalBufferHandle);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	if (stateSet.indexedDraw) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, stateSet.indexBufferHandle);
