@@ -7,11 +7,18 @@
 #include <GL/glew.h>
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 
 #include "GenericDataArray.h"
 #include "ShaderProgramGL.h"
 
 namespace sg {
+
+struct DirectionalLight 
+{
+	glm::vec3 direction;
+	glm::vec3 intensity;
+};
 
 class RenderStateSet 
 {
@@ -45,6 +52,7 @@ public:
 	void setShaderProgram(GLuint programHandle);
 	void setProjectionMatrix(const glm::mat4& matrix);
 	void setViewMatrix(const glm::mat4& matrix);
+	void addLightDirectional(const glm::vec3& direction, const glm::vec3& intensity);
 
 	void init();
 	void resizeViewport(unsigned int width, unsigned int height);
@@ -63,10 +71,11 @@ private:
 	GLuint m_mvpMatrixHandle;
 	GLuint m_normalMatrixHandle;
 	GLuint m_diffuseColorHandle;
-	GLuint m_lightIntensityHandle;
-	GLuint m_lightDirectionHandle;
+	GLuint m_numLightsHandle;
+	GLuint m_directionalLightsHandle;
 
 	ShaderProgramGL m_defaultShaderProgram;
+	std::vector<glm::vec3> m_directionalLights;
 
 	std::stack<RenderStateSet> m_renderState;
     std::map<int, RenderStateSet> m_cache;

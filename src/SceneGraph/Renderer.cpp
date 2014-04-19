@@ -118,6 +118,12 @@ void Renderer::setViewMatrix(const glm::mat4& matrix)
 	m_viewMatrix = matrix;
 }
 
+void Renderer::addLightDirectional(const glm::vec3& direction, const glm::vec3& intensity)
+{
+	m_directionalLights.push_back(direction);
+	m_directionalLights.push_back(intensity);
+}
+
 void Renderer::init()
 {
 	GLuint vao;
@@ -138,8 +144,8 @@ void Renderer::init()
 	m_mvpMatrixHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "mvpMatrix");
 	m_normalMatrixHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "normalMatrix");
 	m_diffuseColorHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "diffuseColor");
-	m_lightIntensityHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "lightIntensity");
-	m_lightDirectionHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "lightDirection");
+	m_numLightsHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "numLights");
+	m_directionalLightsHandle = glGetUniformLocation(m_defaultShaderProgram.handle(), "directionalLights");
 
 }
 
@@ -164,13 +170,9 @@ void Renderer::renderTriangles()
 	glm::mat3 normalMatrix(m_viewMatrix);
 	glUniformMatrix3fv(m_normalMatrixHandle, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	glUniform4f(m_diffuseColorHandle, 0.8f, 0.8f, 0.8f, 1.0f);
-	glUniform4f(m_lightIntensityHandle, 1.0f, 1.0f, 1.0f, 1.0f);
+	glUniform1i(m_numLightsHandle, m_directionalLights.size() / 2);
 
-	glm::mat4 lightRot = glm::rotate(glm::mat4(), -45.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::vec4 lightDir(0.0f, 0.0f, -1.0f, 0.0);
-	lightDir = lightRot * lightDir;
-
-	glUniform3f(m_lightDirectionHandle, lightDir.x, lightDir.y, lightDir.z);
+	glUniform3fv(m_directionalLightsHandle, m_directionalLights.size(), glm::value_ptr(m_directionalLights[0]));
 	
 	glBindBuffer(GL_ARRAY_BUFFER, stateSet.vertexBufferHandle);
     glEnableVertexAttribArray(0);

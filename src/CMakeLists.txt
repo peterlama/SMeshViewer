@@ -10,6 +10,7 @@ set(SCENEGRAPH_SOURCES
     SceneGraph/GeometryNode.cpp
     SceneGraph/GroupNode.cpp
     SceneGraph/IndexNode.cpp
+	SceneGraph/LightDirectionalNode.cpp
     SceneGraph/Node.cpp
 	SceneGraph/NormalNode.cpp
     SceneGraph/Renderer.cpp
@@ -25,6 +26,7 @@ set(SCENEGRAPH_HEADERS
     SceneGraph/GeometryNode.h
     SceneGraph/GroupNode.h
     SceneGraph/IndexNode.h
+	SceneGraph/LightDirectionalNode.h
     SceneGraph/Node.h
 	SceneGraph/NormalNode.h
     SceneGraph/Renderer.h

@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "View3d.h"
 #include "Mesh.h"
@@ -22,6 +23,7 @@
 #include "IndexNode.h"
 #include "DrawMethodNode.h"
 #include "CameraNode.h"
+#include "LightDirectionalNode.h"
 
 View3d::View3d(const QGLFormat &format, QWidget *parent)
     : QGLWidget(format, parent), m_viewNav(3.0f, 0.0f, 0.0f)
@@ -203,6 +205,16 @@ void View3d::setupSceneGraph()
 {
 	sg::GroupNode* root = m_sceneGraph.root();
 	Mesh* mesh;
+
+	glm::mat4 lightTransform;
+	lightTransform = glm::rotate(lightTransform, 60.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	lightTransform = glm::rotate(lightTransform, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	root->addChild(new sg::LightDirectionalNode(lightTransform, glm::vec3(1.0f, 1.0f, 1.0f)));
+
+	lightTransform = glm::mat4();
+	lightTransform = glm::rotate(lightTransform, 120.0f, glm::vec3(1.0f, 0.0f, 1.0f));
+	lightTransform = glm::rotate(lightTransform, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	root->addChild(new sg::LightDirectionalNode(lightTransform, glm::vec3(0.1f, 0.1f, 0.1f)));
 
 	for (std::vector<Mesh*>::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it) {
 		mesh = *it;
