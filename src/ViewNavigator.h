@@ -32,6 +32,7 @@ private:
     glm::quat m_orientation;
     
     float m_rotationScale;
+	float m_translationScale;
     int m_pixelXPrev;
     int m_pixelYPrev;
 };

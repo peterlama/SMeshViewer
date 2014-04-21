@@ -172,7 +172,7 @@ void View3d::resizeGL(int width, int height)
 
 void View3d::mousePressEvent(QMouseEvent* event)
 {
-	if (event->button() == Qt::LeftButton) {
+	if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
 		m_viewNav.setStartPixel(event->pos().x(), event->pos().y());
 	}
 }
@@ -182,6 +182,10 @@ void View3d::mouseMoveEvent(QMouseEvent* event)
 	if ((event->buttons() & Qt::LeftButton) && rect().contains(event->pos())) {
 		m_viewNav.rotate(event->pos().x(), event->pos().y());
 		//updateSceneGraph();
+		updateGL();
+	}
+	else if ((event->buttons() & Qt::RightButton) && rect().contains(event->pos())) {
+		m_viewNav.pan(event->pos().x(), event->pos().y());
 		updateGL();
 	}
 	else {

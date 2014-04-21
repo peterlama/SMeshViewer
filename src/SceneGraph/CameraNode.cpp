@@ -59,9 +59,9 @@ const glm::mat4& CameraNode::worldToCamera()
 		m_worldToCamera = glm::mat4();
         
 		m_worldToCamera = glm::translate(m_worldToCamera, m_position);
-		m_worldToCamera = glm::rotate(m_worldToCamera, glm::angle(m_orientation), glm::axis(m_orientation));
 		m_worldToCamera = glm::translate(m_worldToCamera, m_origin);
-        
+		m_worldToCamera = glm::rotate(m_worldToCamera, glm::angle(m_orientation), glm::axis(m_orientation));
+	    
         m_transformChanged = false;
     }
 
