@@ -20,6 +20,8 @@ public:
     QSize sizeHint() const;
 
     bool importObjMesh(const char* filename);
+	ViewNavigator* viewNav();
+	void update();
 
 protected:
     void initializeGL();

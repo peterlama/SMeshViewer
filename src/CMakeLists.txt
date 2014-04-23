@@ -38,7 +38,7 @@ set(SCENEGRAPH_HEADERS
 
 source_group(SceneGraph FILES ${SCENEGRAPH_SOURCES} ${SCENEGRAPH_HEADERS})
 
-qt4_wrap_cpp(MOC_SRCS View3d.h)
+qt4_wrap_cpp(MOC_SRCS View3d.h MainWindow.h)
 
 set(SOURCES
     ${SCENEGRAPH_SOURCES} 
@@ -46,6 +46,8 @@ set(SOURCES
     ${MOC_SRCS}
     GenericDataArray.h
     main.cpp
+	MainWindow.cpp
+	MainWindow.h
     Mesh.cpp
     Mesh.h
     View3d.cpp

@@ -26,7 +26,7 @@
 #include "LightDirectionalNode.h"
 
 View3d::View3d(const QGLFormat &format, QWidget *parent)
-    : QGLWidget(format, parent), m_viewNav(3.0f, 0.0f, 0.0f)
+    : QGLWidget(format, parent), m_viewNav(7.0f, 0.0f, 0.0f)
 {
     //OpenGL context needs to be set up before initializing glew
     makeCurrent();
@@ -36,10 +36,6 @@ View3d::View3d(const QGLFormat &format, QWidget *parent)
 	{
 		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
 	}
-
-	importObjMesh("C:\\Users\\Peter\\norm.obj");
-
-	//m_viewNav.setDefaultDistance(5.0f);
 }
 
 View3d::~View3d()
@@ -127,7 +123,7 @@ bool View3d::importObjMesh(const char* filename)
 			}
 		}
 	}
-
+	
 	//rearrange normals so that they can be accessed by the same index as vertices
 	if (!uniqueNormals.empty()) {
 		std::vector<glm::vec3> normals(vertices.size());
@@ -145,13 +141,28 @@ bool View3d::importObjMesh(const char* filename)
     else {
 		m_meshes.push_back(new Mesh(vertices, faces));
 	}
-	std::cout << timer.elapsed() << std::endl;
 
 	createBuffers();
+
+	std::cout << "Time: " << timer.elapsed() / 1000.0 << std::endl;
+	std::cout << "Vertices: " << vertices.size() << std::endl;
+	std::cout << "Faces: " << faces.size() << std::endl;
+
 	setupSceneGraph();
 
 	return true;
 
+}
+
+ViewNavigator* View3d::viewNav()
+{
+	return &m_viewNav;
+}
+
+void View3d::update()
+{
+	updateSceneGraph();
+	updateGL();
 }
 
 void View3d::initializeGL()
