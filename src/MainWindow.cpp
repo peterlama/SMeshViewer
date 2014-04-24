@@ -63,9 +63,9 @@ void MainWindow::viewZoomOut()
 
 void MainWindow::setupActions()
 {
-	m_fileOpenAction = new QAction(style()->standardIcon(QStyle::SP_FileIcon), tr("&Open"), this);
-	m_viewZoomInAction = new QAction(tr("Zoom In"), this);
-	m_viewZoomOutAction = new QAction(tr("Zoom Out"), this);
+	m_fileOpenAction = new QAction(QIcon(":/icons/Document-open.svg"), tr("&Open"), this);
+	m_viewZoomInAction = new QAction(QIcon(":/icons/View-zoom-in.svg"), tr("Zoom In"), this);
+	m_viewZoomOutAction = new QAction(QIcon(":/icons/View-zoom-out.svg"), tr("Zoom Out"), this);
 
 	connect(m_fileOpenAction, SIGNAL(triggered()), this, SLOT(fileOpen()));
 	connect(m_viewZoomInAction, SIGNAL(triggered()), this, SLOT(viewZoomIn()));

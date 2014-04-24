@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+  <qresource>
+    <file>icons/Document-open.svg</file>
+    <file>icons/View-zoom-in.svg</file>
+    <file>icons/View-zoom-out.svg</file>
+  </qresource>
+</RCC>

@@ -39,11 +39,13 @@ set(SCENEGRAPH_HEADERS
 source_group(SceneGraph FILES ${SCENEGRAPH_SOURCES} ${SCENEGRAPH_HEADERS})
 
 qt4_wrap_cpp(MOC_SRCS View3d.h MainWindow.h)
+qt4_add_resources(RCC_SRCS icons.qrc)
 
 set(SOURCES
     ${SCENEGRAPH_SOURCES} 
 	${SCENEGRAPH_HEADERS}
     ${MOC_SRCS}
+    ${RCC_SRCS}
     GenericDataArray.h
     main.cpp
 	MainWindow.cpp
