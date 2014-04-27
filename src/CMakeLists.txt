@@ -17,6 +17,7 @@ set(SCENEGRAPH_SOURCES
 	SceneGraph/SceneGraph.cpp
     SceneGraph/ShaderNode.cpp
 	SceneGraph/ShaderProgramGL.cpp
+    SceneGraph/TransformNode.h
     SceneGraph/VertexNode.cpp
 )
 
@@ -33,6 +34,7 @@ set(SCENEGRAPH_HEADERS
 	SceneGraph/SceneGraph.h
     SceneGraph/ShaderNode.h
 	SceneGraph/ShaderProgramGL.h
+    SceneGraph/TransformNode.h
     SceneGraph/VertexNode.h
 )
 
@@ -52,6 +54,8 @@ set(SOURCES
 	MainWindow.h
     Mesh.cpp
     Mesh.h
+    Transform.cpp
+    Transform.h
     View3d.cpp
     View3d.h
 	ViewNavigator.cpp

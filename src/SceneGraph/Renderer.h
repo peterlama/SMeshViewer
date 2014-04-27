@@ -45,6 +45,9 @@ public:
 	void pop();
     void reset();
 
+	void pushMatrix(const glm::mat4& matrix);
+	void popMatrix();
+
 	void setIndexedDrawing(bool indexedDraw);
     void setVertices(const GenericDataArray<float>* vertices);
 	void setNormals(const GenericDataArray<float>* normals);
@@ -65,8 +68,11 @@ private:
 	RenderStateSet& cacheGet(int key);
 	void cacheAdd(int key, const RenderStateSet& value);
 
+	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;
 	glm::mat4 m_projectionMatrix;
+
+	std::stack<glm::mat4> m_modelMatrixStack;
 
 	GLuint m_mvpMatrixHandle;
 	GLuint m_normalMatrixHandle;

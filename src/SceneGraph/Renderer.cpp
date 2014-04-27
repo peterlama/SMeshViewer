@@ -50,6 +50,18 @@ void Renderer::reset()
     //m_vertexBufferHandle = 0;
 }
 
+void Renderer::pushMatrix(const glm::mat4& matrix) 
+{
+	m_modelMatrixStack.push(m_modelMatrix);
+	m_modelMatrix = matrix * m_modelMatrix;
+}
+
+void Renderer::popMatrix()
+{
+	m_modelMatrix = m_modelMatrixStack.top();
+	m_modelMatrixStack.pop();
+}
+
 void Renderer::setIndexedDrawing(bool indexedDraw)
 {
 	m_renderState.top().indexedDraw = indexedDraw;
@@ -166,7 +178,7 @@ void Renderer::renderTriangles()
 
 	glUseProgram(m_defaultShaderProgram.handle());
 
-	glUniformMatrix4fv(m_mvpMatrixHandle, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix * m_viewMatrix));
+	glUniformMatrix4fv(m_mvpMatrixHandle, 1, GL_FALSE, glm::value_ptr(m_projectionMatrix * m_viewMatrix * m_modelMatrix));
 	glm::mat3 normalMatrix(m_viewMatrix);
 	glUniformMatrix3fv(m_normalMatrixHandle, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 	glUniform4f(m_diffuseColorHandle, 0.8f, 0.8f, 0.8f, 1.0f);
