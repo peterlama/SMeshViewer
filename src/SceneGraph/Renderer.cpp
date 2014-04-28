@@ -93,7 +93,7 @@ void Renderer::setVertices(const GenericDataArray<float>* vertices)
 {
 	if (m_renderState.top().vertexBufferHandle != 0) {
         glBindBuffer(GL_ARRAY_BUFFER, m_renderState.top().vertexBufferHandle);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices->byteSize(), vertices->data());
+        glBufferSubData(GL_ARRAY_BUFFER, 0, vertices->byteSize(), vertices->rawData());
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
     else {
@@ -107,7 +107,7 @@ void Renderer::setNormals(const GenericDataArray<float>* normals)
 {
 	if (m_renderState.top().normalBufferHandle != 0) {
 		glBindBuffer(GL_ARRAY_BUFFER, m_renderState.top().vertexBufferHandle);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, normals->byteSize(), normals->data());
+		glBufferSubData(GL_ARRAY_BUFFER, 0, normals->byteSize(), normals->rawData());
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	else {
@@ -120,18 +120,18 @@ void Renderer::setIndices(const GenericDataArray<unsigned int>* indices)
 {
 	if (m_renderState.top().indexBufferHandle != 0) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_renderState.top().indexBufferHandle);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices->byteSize(), indices->data());
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices->byteSize(), indices->rawData());
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	else {
 		GLuint handle;
 		glGenBuffers(1, &handle);
 
-		m_renderState.top().numIndices = indices->length() * indices->componentLength();
+		m_renderState.top().numIndices = indices->length() * indices->elementLength();
 		m_renderState.top().indexBufferHandle = handle;
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, handle);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->byteSize(), indices->data(), GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->byteSize(), indices->rawData(), GL_STATIC_DRAW);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		
 	}
@@ -238,7 +238,7 @@ GLuint Renderer::uploadVertices(const GenericDataArray<float>* vertices)
     glGenBuffers(1, &handle);
     
     glBindBuffer(GL_ARRAY_BUFFER, handle);
-    glBufferData(GL_ARRAY_BUFFER, vertices->byteSize(), vertices->data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices->byteSize(), vertices->rawData(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     return handle;

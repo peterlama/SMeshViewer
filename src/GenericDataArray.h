@@ -23,85 +23,79 @@
 #ifndef GENERIC_DATA_ARRAY_H
 #define GENERIC_DATA_ARRAY_H
 
+#include <cstddef>
 #include <stdexcept>
+#include <vector>
 
-template<typename T>
-class GenericDataArray
+template <typename T, size_t N>
+class MeshElement
 {
 public:
-    typedef T* iterator;
-    typedef const T* const_iterator;
-  
-    GenericDataArray() 
-		: m_length(0), m_componentLength(0), m_data(0)
-    {
-    
-    }
-    
-	GenericDataArray(unsigned int length, unsigned int componentLength = 1) 
-		: m_length(length), m_componentLength(componentLength)
-    {
-		m_data = new T[length * componentLength];
-    }
-    
-	GenericDataArray(const T* data, unsigned int length, unsigned int componentLength = 1)
-        : m_length(length), m_componentLength(componentLength)
-    {
-        m_data = new T[length * componentLength];
-        setData(data, length, componentLength);
-    }
-    
-	~GenericDataArray()
-    {
-        delete[] m_data;
-    }
-    
-	unsigned int length() const { return m_length; }
-	unsigned int componentLength() const { return m_componentLength; }
-	unsigned int byteSize() const { return m_length * m_componentLength * sizeof(T); }
-
-    iterator begin() const { return m_data; }
-	iterator end() const { return m_data + (m_length * m_componentLength); }
-    const T* data() const { return m_data; }
-	void setData(const T* data, int length, int componentLength = 1)
+	MeshElement() { }
+	MeshElement(const T* data)
 	{
-		if (m_data == 0) {
-		    m_length = length;
-		    m_componentLength = componentLength;
-			m_data = new T[length * componentLength];
-	    }
-		std::copy(data, data + (length * componentLength), m_data);
+		for (size_t i = 0; i < N; ++i) {
+			m_data[i] = *(data++);
+		}
 	}
-    
-	T& at(unsigned int index)
+
+	T* data() { return &m_data; }
+
+	void fill(T value)
 	{
-		if (index >= m_length) {
-			throw std::out_of_range("GenericDataArray: index out of range");
+		for (size_t i = 0; i < N; ++i) {
+			m_data[i] = value;
+		}
+	}
+
+	size_t length() { return N; }
+
+	T& at(size_t index) 
+	{
+		if (index >= N) {
+			throw std::out_of_range("MeshElement: index out of range");
 		}
 		return m_data[index];
 	}
+	T& operator[](size_t index) { return m_data[index]; }
 
-	T& at(unsigned int index, unsigned int componentIndex)
-	{
-		if (index >= m_length) {
-			throw std::out_of_range("GenericDataArray: index out of range");
-		}
+private:
+	T m_data[N];
+};
 
-		if (componentIndex >= m_componentLength) {
-			throw std::out_of_range("GenericDataArray: component index out of range");
-		}
+template<typename T, size_t N = 3>
+class GenericDataArray
+{
+public:
+	typedef typename std::vector<MeshElement<T, N> >::iterator iterator;
+	typedef typename std::vector<MeshElement<T, N> >::const_iterator const_iterator;
+	typedef typename std::vector<MeshElement<T, N> >::value_type value_type;
+  
+	GenericDataArray() { }
+	GenericDataArray(size_t length) : m_data(length) { }
+	~GenericDataArray() { }
+    
+	void reserve(size_t count) { m_data.reserve(count); }
 
-		return m_data[(index * m_componentLength) + componentIndex];
-	}
+	bool empty() { return m_data.empty(); }
+	size_t length() const { return m_data.size(); }
+	unsigned int elementLength() const { return N; }
+	unsigned int byteSize() const { return length() * sizeof(value_type); }
 
-	T& operator[](unsigned int index) { return m_data[index]; }
+    iterator begin() const { return m_data.begin(); }
+	iterator end() const { return m_data.end(); }
+    
+	value_type& at(size_t index) { return m_data.at(index) }
+	T& at(size_t index, size_t elementIndex) { return m_data.at(index).at(elementIndex); }
+	value_type& operator[](size_t index) { return m_data[index]; }
+
+	const T* rawData() { return &m_data[0][0]; }
+	void setRawData(const T* data) { std::copy(data, data + (length() * N), m_data); }
     
 private:
     GenericDataArray(const GenericDataArray& other);
-    
-    unsigned int m_length;
-    unsigned int m_componentLength;
-    T* m_data;
+
+    std::vector<MeshElement<T, N> > m_data;
 };
 
 #endif // GENERIC_DATA_ARRAY_H
