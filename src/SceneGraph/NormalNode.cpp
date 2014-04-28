@@ -30,7 +30,7 @@ NormalNode::NormalNode()
 {
 }
 
-NormalNode::NormalNode(GenericDataArray<float>* normals)
+NormalNode::NormalNode(std::shared_ptr<GenericDataArray<float> > normals)
     :m_normals(normals)
 {
 }
@@ -39,7 +39,7 @@ NormalNode::~NormalNode()
 {
 }
 
-void NormalNode::setNormals(GenericDataArray<float>* normals)
+void NormalNode::setNormals(std::shared_ptr<GenericDataArray<float> > normals)
 {
     m_normals = normals;
 	setNeedsRendering(true);

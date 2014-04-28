@@ -25,6 +25,7 @@
 
 #include <stack>
 #include <map>
+#include <memory>
 
 #include <GL/glew.h>
 
@@ -71,9 +72,9 @@ public:
 	void popMatrix();
 
 	void setIndexedDrawing(bool indexedDraw);
-    void setVertices(const GenericDataArray<float>* vertices);
-	void setNormals(const GenericDataArray<float>* normals);
-	void setIndices(const GenericDataArray<unsigned int>* indices);
+	void setVertices(std::shared_ptr<GenericDataArray<float> > vertices);
+	void setNormals(std::shared_ptr<GenericDataArray<float> > normals);
+	void setIndices(std::shared_ptr<GenericDataArray<unsigned int> > indices);
 	void setShaderProgram(GLuint programHandle);
 	void setProjectionMatrix(const glm::mat4& matrix);
 	void setViewMatrix(const glm::mat4& matrix);
@@ -84,7 +85,7 @@ public:
 	void clearScreen();
 	void renderTriangles();
 private:
-    GLuint uploadVertices(const GenericDataArray<float>* vertices);
+	GLuint uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices);
 
 	bool cacheHasEntry(int key);
 	RenderStateSet& cacheGet(int key);

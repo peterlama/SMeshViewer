@@ -23,6 +23,8 @@
 #ifndef VERTEX_NODE_H
 #define VERTEX_NODE_H
 
+#include <memory>
+
 #include "Node.h"
 #include "../GenericDataArray.h"
 
@@ -32,15 +34,15 @@ class VertexNode: public Node
 {
 public:
     VertexNode();
-    VertexNode(GenericDataArray<float>* vertices);
+	VertexNode(std::shared_ptr<GenericDataArray<float> > vertices);
     virtual ~VertexNode();
     
-    void setVertices(GenericDataArray<float>* vertices);
+	void setVertices(std::shared_ptr<GenericDataArray<float> > vertices);
 
 	virtual void renderInit(Renderer* renderer);
     virtual void render(Renderer* renderer);
 private:
-    GenericDataArray<float>* m_vertices;
+    std::shared_ptr<GenericDataArray<float> > m_vertices;
 };
     
 }

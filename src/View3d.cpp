@@ -279,14 +279,14 @@ void View3d::createBuffers()
 	for (std::vector<Mesh*>::iterator it = m_meshes.begin(); it != m_meshes.end(); ++it) {
 		Mesh* mesh = *it;
 		
-		GenericDataArray<float>* vertexBuffer = new GenericDataArray<float>(mesh->vertices().size(), 3);
+		std::shared_ptr<GenericDataArray<float> > vertexBuffer = std::make_shared<GenericDataArray<float> >(mesh->vertices().size());
 		for (unsigned int i = 0; i < mesh->vertices().size(); ++i) {
 			for (int j = 0; j < 3; ++j) {
 				vertexBuffer->at(i, j) = mesh->vertices()[i][j];
 			}
 		}
 
-		GenericDataArray<float>* normalBuffer = new GenericDataArray<float>(mesh->normals().size(), 3);
+		std::shared_ptr<GenericDataArray<float> > normalBuffer = std::make_shared<GenericDataArray<float> >(mesh->normals().size());
 		for (unsigned int i = 0; i < mesh->normals().size(); ++i) {
 			for (int j = 0; j < 3; ++j) {
 				normalBuffer->at(i, j) = mesh->normals()[i][j];
@@ -294,7 +294,7 @@ void View3d::createBuffers()
 			//std::cout << "(" << normalBuffer->at(i, 0) << ", " << normalBuffer->at(i, 1) << ", " << normalBuffer->at(i, 2) << ")" << std::endl;
 		}
 
-		GenericDataArray<unsigned int>* indexBuffer = new GenericDataArray<unsigned int>(mesh->faces().size(), 3);
+		std::shared_ptr<GenericDataArray<unsigned int> > indexBuffer = std::make_shared<GenericDataArray<unsigned int> >(mesh->faces().size());
 		for (unsigned int i = 0; i < mesh->faces().size(); ++i) {
 			for (int j = 0; j < 3; ++j) {
 				indexBuffer->at(i, j) = mesh->faces()[i][j];

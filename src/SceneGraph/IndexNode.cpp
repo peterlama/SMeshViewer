@@ -30,7 +30,7 @@ IndexNode::IndexNode()
 {
 }
 
-IndexNode::IndexNode(GenericDataArray<unsigned int>* indices)
+IndexNode::IndexNode(std::shared_ptr<GenericDataArray<unsigned int> > indices)
     :m_indices(indices)
 {
 }
@@ -39,7 +39,7 @@ IndexNode::~IndexNode()
 {
 }
 
-void IndexNode::setIndices(GenericDataArray<unsigned int>* indices)
+void IndexNode::setIndices(std::shared_ptr<GenericDataArray<unsigned int> > indices)
 {
     m_indices = indices;
 	setNeedsRendering(true);

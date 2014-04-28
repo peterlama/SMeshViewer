@@ -23,6 +23,8 @@
 #ifndef INDEX_NODE_H
 #define INDEX_NODE_H
 
+#include <memory>
+
 #include "Node.h"
 #include "../GenericDataArray.h"
 
@@ -32,15 +34,15 @@ class IndexNode: public Node
 {
 public:
     IndexNode();
-    IndexNode(GenericDataArray<unsigned int>* indices);
+	IndexNode(std::shared_ptr<GenericDataArray<unsigned int> > indices);
     virtual ~IndexNode();
     
-    void setIndices(GenericDataArray<unsigned int>* indices);
+	void setIndices(std::shared_ptr<GenericDataArray<unsigned int> > indices);
 
 	virtual void renderInit(Renderer* renderer);
     virtual void render(Renderer* renderer);
 private:
-    GenericDataArray<unsigned int>* m_indices;
+	std::shared_ptr<GenericDataArray<unsigned int> > m_indices;
 };
     
 }

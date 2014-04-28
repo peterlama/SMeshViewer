@@ -89,7 +89,7 @@ void Renderer::setIndexedDrawing(bool indexedDraw)
 	m_renderState.top().indexedDraw = indexedDraw;
 }
 
-void Renderer::setVertices(const GenericDataArray<float>* vertices)
+void Renderer::setVertices(std::shared_ptr<GenericDataArray<float> > vertices)
 {
 	if (m_renderState.top().vertexBufferHandle != 0) {
         glBindBuffer(GL_ARRAY_BUFFER, m_renderState.top().vertexBufferHandle);
@@ -103,7 +103,7 @@ void Renderer::setVertices(const GenericDataArray<float>* vertices)
     }
 }
 
-void Renderer::setNormals(const GenericDataArray<float>* normals)
+void Renderer::setNormals(std::shared_ptr<GenericDataArray<float> > normals)
 {
 	if (m_renderState.top().normalBufferHandle != 0) {
 		glBindBuffer(GL_ARRAY_BUFFER, m_renderState.top().vertexBufferHandle);
@@ -116,7 +116,7 @@ void Renderer::setNormals(const GenericDataArray<float>* normals)
 	}
 }
 
-void Renderer::setIndices(const GenericDataArray<unsigned int>* indices)
+void Renderer::setIndices(std::shared_ptr<GenericDataArray<unsigned int> > indices)
 {
 	if (m_renderState.top().indexBufferHandle != 0) {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_renderState.top().indexBufferHandle);
@@ -232,7 +232,7 @@ void Renderer::renderTriangles()
 	glUseProgram(0);
 }
 
-GLuint Renderer::uploadVertices(const GenericDataArray<float>* vertices)
+GLuint Renderer::uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices)
 {
     GLuint handle;
     glGenBuffers(1, &handle);

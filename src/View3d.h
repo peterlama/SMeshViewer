@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <map>
+#include <memory>
 
 #include <GL/glew.h>
 
@@ -64,7 +65,7 @@ private:
 	sg::SceneGraph m_sceneGraph;
 
     std::vector<Mesh*> m_meshes;
-	std::map<unsigned int, GenericDataArray<float>* > m_vertexBuffers;
-	std::map<unsigned int, GenericDataArray<float>* > m_normalBuffers;
-	std::map<unsigned int, GenericDataArray<unsigned int>* > m_indexBuffers;
+	std::map<unsigned int, std::shared_ptr<GenericDataArray<float> > > m_vertexBuffers;
+	std::map<unsigned int, std::shared_ptr<GenericDataArray<float> > > m_normalBuffers;
+	std::map<unsigned int, std::shared_ptr<GenericDataArray<unsigned int> > > m_indexBuffers;
 };

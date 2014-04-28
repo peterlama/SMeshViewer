@@ -23,6 +23,8 @@
 #ifndef NORMAL_NODE_H
 #define NORMAL_NODE_H
 
+#include <memory>
+
 #include "Node.h"
 #include "../GenericDataArray.h"
 
@@ -32,15 +34,15 @@ class NormalNode: public Node
 {
 public:
     NormalNode();
-    NormalNode(GenericDataArray<float>* normals);
+	NormalNode(std::shared_ptr<GenericDataArray<float> > normals);
     virtual ~NormalNode();
     
-    void setNormals(GenericDataArray<float>* normals);
+	void setNormals(std::shared_ptr<GenericDataArray<float> > normals);
 
 	virtual void renderInit(Renderer* renderer);
     virtual void render(Renderer* renderer);
 private:
-    GenericDataArray<float>* m_normals;
+	std::shared_ptr<GenericDataArray<float> > m_normals;
 };
     
 }

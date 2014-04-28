@@ -30,7 +30,7 @@ VertexNode::VertexNode()
 {
 }
 
-VertexNode::VertexNode(GenericDataArray<float>* vertices)
+VertexNode::VertexNode(std::shared_ptr<GenericDataArray<float> > vertices)
     :m_vertices(vertices)
 {
 }
@@ -39,7 +39,7 @@ VertexNode::~VertexNode()
 {
 }
 
-void VertexNode::setVertices(GenericDataArray<float>* vertices)
+void VertexNode::setVertices(std::shared_ptr<GenericDataArray<float> > vertices)
 {
     m_vertices = vertices;
 	setNeedsRendering(true);
