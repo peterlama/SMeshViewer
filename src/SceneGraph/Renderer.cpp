@@ -43,8 +43,10 @@ Renderer::Renderer()
 	m_defaultShaderProgram = ShaderProgramGL::default();
 }
 
-Renderer::~Renderer()
+Renderer* Renderer::instance()
 {
+	static Renderer renderer;
+	return &renderer;
 }
 
 void Renderer::push(int nodeId)
@@ -158,6 +160,16 @@ void Renderer::addLightDirectional(const glm::vec3& direction, const glm::vec3& 
 	m_directionalLights.push_back(intensity);
 }
 
+unsigned int Renderer::viewWidth()
+{
+	return m_viewWidth;
+}
+
+unsigned int Renderer::viewHeight()
+{
+	return m_viewHeight;
+}
+
 void Renderer::init()
 {
 	GLuint vao;
@@ -185,6 +197,9 @@ void Renderer::init()
 
 void Renderer::resizeViewport(unsigned int width, unsigned int height)
 {
+	m_viewWidth = width;
+	m_viewHeight = height;
+
 	glViewport(0, 0, width, height);
 }
 

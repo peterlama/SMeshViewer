@@ -33,6 +33,8 @@
 #include <QStyle>
 #include <QToolBar>
 
+#include "SceneGraph.h"
+#include "GroupNode.h"
 #include "View3d.h"
 #include "MainWindow.h"
 
@@ -64,7 +66,13 @@ void MainWindow::fileOpen()
 	if (!filename.isNull()) {
 		statusBar()->showMessage(tr("Loading..."));
 
-		m_view3d->importObjMesh(filename.toLatin1());
+		m_meshManager.importObjMesh(filename.toLatin1());
+		sg::SceneGraph scene;
+		scene.addDefaultCamera();
+		scene.addDefaultLights();
+		scene.root()->addChild(m_meshManager.geometryRootNode());
+
+		m_view3d->setSceneGraph(scene);
 		m_view3d->update();
 
 		statusBar()->showMessage(tr("Done"), 2000);

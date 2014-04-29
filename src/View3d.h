@@ -42,9 +42,9 @@ public:
     ~View3d();
     QSize sizeHint() const;
 
-    bool importObjMesh(const char* filename);
 	ViewNavigator* viewNav();
 	void update();
+	void setSceneGraph(const sg::SceneGraph& sceneGraph);
 
 protected:
     void initializeGL();
@@ -58,14 +58,7 @@ private:
 	void setupSceneGraph();
 	void updateSceneGraph();
 
-	void createBuffers();
-
 	ViewNavigator m_viewNav;
 
 	sg::SceneGraph m_sceneGraph;
-
-    std::vector<Mesh*> m_meshes;
-	std::map<unsigned int, std::shared_ptr<GenericDataArray<float> > > m_vertexBuffers;
-	std::map<unsigned int, std::shared_ptr<GenericDataArray<float> > > m_normalBuffers;
-	std::map<unsigned int, std::shared_ptr<GenericDataArray<unsigned int> > > m_indexBuffers;
 };

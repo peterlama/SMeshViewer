@@ -20,50 +20,76 @@
 //SOFTWARE.
 //-----------------------------------------------------------------------------
 
+#include <iostream>
+
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "GroupNode.h"
+#include "LightDirectionalNode.h"
 #include "CameraNode.h"
 #include "SceneGraph.h"
 
 namespace sg {
 
 SceneGraph::SceneGraph()
+:m_camera(0)
 {
-	m_root = new GroupNode;
-	m_camera = new CameraNode;
-
-	m_root->addChild(m_camera);
+	m_root = std::make_shared<GroupNode>();
 }
 
 SceneGraph::~SceneGraph()
 {
-	delete m_root;
 }
 
-GroupNode* SceneGraph::root()
+std::shared_ptr<GroupNode> SceneGraph::root()
 {
 	return m_root;
 }
 
-CameraNode* SceneGraph::camera()
+void SceneGraph::setRoot(std::shared_ptr<GroupNode> node)
+{
+	m_root = node;
+}
+
+std::shared_ptr<CameraNode> SceneGraph::camera()
 {
 	return m_camera;
 }
 
+void SceneGraph::addDefaultCamera()
+{
+	m_camera = std::make_shared<CameraNode>();
+	m_root->addChild(m_camera.get());
+}
+
+void SceneGraph::addDefaultLights()
+{
+	glm::mat4 lightTransform;
+	lightTransform = glm::rotate(lightTransform, 60.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+	lightTransform = glm::rotate(lightTransform, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_root->addChild(new LightDirectionalNode(lightTransform, glm::vec3(1.0f, 1.0f, 1.0f)));
+
+	lightTransform = glm::mat4();
+	lightTransform = glm::rotate(lightTransform, 120.0f, glm::vec3(1.0f, 0.0f, 1.0f));
+	lightTransform = glm::rotate(lightTransform, 30.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	m_root->addChild(new LightDirectionalNode(lightTransform, glm::vec3(0.1f, 0.1f, 0.1f)));
+}
+
 void SceneGraph::renderInit()
 {
-	m_renderer.init();
-	m_root->renderInit(&m_renderer);
+	Renderer::instance()->init();
+	m_root->renderInit(Renderer::instance());
 }
 
 void SceneGraph::render()
 {
-	m_renderer.clearScreen();
-	m_root->render(&m_renderer);
+	Renderer::instance()->clearScreen();
+	m_root->render(Renderer::instance());
 }
 
 void SceneGraph::resizeViewport(unsigned int width, unsigned int height)
 {
-	m_renderer.resizeViewport(width, height);
+	Renderer::instance()->resizeViewport(width, height);
 }
 
 } //namespace sg

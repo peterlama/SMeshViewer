@@ -45,7 +45,7 @@ public:
     void setClippingFar(float distance);
 
     const glm::mat4& worldToCamera();
-	const glm::mat4& projection();
+	const glm::mat4& projection(float width, float height);
 
 	virtual void renderInit(Renderer* renderer);
 	virtual void render(Renderer* renderer);

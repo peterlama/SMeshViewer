@@ -90,20 +90,16 @@ const glm::mat4& CameraNode::worldToCamera()
     return m_worldToCamera;
 }
 
-const glm::mat4& CameraNode::projection()
+const glm::mat4& CameraNode::projection(float width, float height)
 {
-    if (m_projectionChanged) {
-        m_projection = glm::perspective(m_fieldOfView, 1.0f, m_clipNear, m_clipFar);
-        
-        m_projectionChanged = false;
-    }
+    m_projection = glm::perspectiveFov(m_fieldOfView, width, height, m_clipNear, m_clipFar);
     
     return m_projection;
 }
 
 void CameraNode::renderInit(Renderer* renderer)
 {
-		renderer->setProjectionMatrix(projection());
+		renderer->setProjectionMatrix(projection(renderer->viewWidth(), renderer->viewHeight()));
 		renderer->setViewMatrix(worldToCamera());
 
 		setNeedsRendering(false);
@@ -112,7 +108,7 @@ void CameraNode::renderInit(Renderer* renderer)
 void CameraNode::render(Renderer* renderer)
 {
 	if (needsRendering()) {
-		renderer->setProjectionMatrix(projection());
+		renderer->setProjectionMatrix(projection(renderer->viewWidth(), renderer->viewHeight()));
 		renderer->setViewMatrix(worldToCamera());
 
 		setNeedsRendering(false);

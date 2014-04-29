@@ -76,6 +76,7 @@ public:
 	~GenericDataArray() { }
     
 	void reserve(size_t count) { m_data.reserve(count); }
+	void push_back(const value_type& element) { m_data.push_back(element); }
 
 	bool empty() { return m_data.empty(); }
 	size_t length() const { return m_data.size(); }
@@ -85,12 +86,11 @@ public:
     iterator begin() const { return m_data.begin(); }
 	iterator end() const { return m_data.end(); }
     
-	value_type& at(size_t index) { return m_data.at(index) }
+	value_type& at(size_t index) { return m_data.at(index); }
 	T& at(size_t index, size_t elementIndex) { return m_data.at(index).at(elementIndex); }
 	value_type& operator[](size_t index) { return m_data[index]; }
 
 	const T* rawData() { return &m_data[0][0]; }
-	void setRawData(const T* data) { std::copy(data, data + (length() * N), m_data); }
     
 private:
     GenericDataArray(const GenericDataArray& other);

@@ -54,6 +54,8 @@ set(SOURCES
 	MainWindow.h
     Mesh.cpp
     Mesh.h
+	MeshManager.cpp
+	MeshManager.h
     Transform.cpp
     Transform.h
     View3d.cpp

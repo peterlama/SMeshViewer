@@ -25,6 +25,8 @@
 
 #include <QMainWindow>
 
+#include "MeshManager.h"
+
 class View3d;
 
 class MainWindow: public QMainWindow
@@ -44,6 +46,8 @@ private:
 	void setupMenus();
     void setupToolBars();
 
+	//SceneGraphBuilder m_builder;
+	MeshManager m_meshManager;
     View3d* m_view3d;
     
 	QAction* m_fileOpenAction;

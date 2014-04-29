@@ -20,41 +20,39 @@
 //SOFTWARE.
 //-----------------------------------------------------------------------------
 
-#ifndef SCENE_GRAPH_H
-#define SCENE_GRAPH_H
+#ifndef MESH_MANAGER_H
+#define MESH_MANAGER_H
 
-#include <memory>
+#include <vector>
 
-#include "Renderer.h"
+#include "GenericDataArray.h"
+#include "Mesh.h"
+#include "SceneGraph.h"
 
 namespace sg {
+	class GroupNode;
+	class GeometryNode;
+	class VertexNode;
+	class NormalNode;
+	class IndexNode;
+}
 
-class GroupNode;
-class CameraNode;
-
-class SceneGraph
+class MeshManager
 {
 public:
-	SceneGraph();
-	~SceneGraph();
+	MeshManager();
 
-	std::shared_ptr<GroupNode> root();
-	void setRoot(std::shared_ptr<GroupNode> node);
-
-	std::shared_ptr<CameraNode> camera();
-
-	void addDefaultCamera();
-	void addDefaultLights();
-
-	void renderInit();
-	void render();
-	void resizeViewport(unsigned int width, unsigned int height);
+	bool importObjMesh(const char* filename);
+	
+	sg::GroupNode* geometryRootNode();
 
 private:
-	std::shared_ptr<GroupNode> m_root;
-	std::shared_ptr<CameraNode> m_camera;
+	sg::GeometryNode* createGeometryNode(
+		std::shared_ptr<GenericDataArray<float> > vertices,
+		std::shared_ptr<GenericDataArray<float> > normals,
+		std::shared_ptr<GenericDataArray<unsigned int> > indices);
+
+	sg::GroupNode* m_geomRoot;
 };
 
-}  //namespace sg
-
-#endif //SCENE_GRAPH_H
+#endif // MESH_MANAGER_H

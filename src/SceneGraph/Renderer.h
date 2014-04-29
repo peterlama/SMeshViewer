@@ -61,8 +61,7 @@ public:
 class Renderer
 {
 public:
-	Renderer();
-	~Renderer();
+	static Renderer* instance();
 
 	void push(int nodeId);
 	void pop();
@@ -80,16 +79,24 @@ public:
 	void setViewMatrix(const glm::mat4& matrix);
 	void addLightDirectional(const glm::vec3& direction, const glm::vec3& intensity);
 
+	unsigned int viewWidth();
+	unsigned int viewHeight();
+
 	void init();
 	void resizeViewport(unsigned int width, unsigned int height);
 	void clearScreen();
 	void renderTriangles();
 private:
+	Renderer();
+
 	GLuint uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices);
 
 	bool cacheHasEntry(int key);
 	RenderStateSet& cacheGet(int key);
 	void cacheAdd(int key, const RenderStateSet& value);
+
+	unsigned int m_viewWidth;
+	unsigned int m_viewHeight;
 
 	glm::mat4 m_modelMatrix;
 	glm::mat4 m_viewMatrix;
