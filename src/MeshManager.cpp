@@ -28,6 +28,8 @@
 #include <QStringList>
 #include <QTextStream>
 
+#include <glm/geometric.hpp>
+
 #include "GroupNode.h"
 #include "GeometryNode.h"
 #include "DrawMethodNode.h"
@@ -112,11 +114,11 @@ bool MeshManager::importObjMesh(const char* filename)
 		}
 	}
 
-	std::shared_ptr<GenericDataArray<float> > normals = std::make_shared<GenericDataArray<float> >(vertices->length());
+	std::shared_ptr<GenericDataArray<float> > normals; 
 
 	//rearrange normals so that they can be accessed by the same index as vertices
 	if (!uniqueNormals->empty()) {
-
+		normals = std::make_shared<GenericDataArray<float> >(vertices->length());
 		for (unsigned int i = 0; i < faces->length(); ++i) {
 			for (unsigned int j = 0; j < 3; ++j) {
 				int vertexIndex = faces->at(i, j);
@@ -124,6 +126,9 @@ bool MeshManager::importObjMesh(const char* filename)
 				normals->at(vertexIndex) = uniqueNormals->at(normalIndex);
 			}
 		}
+	}
+	else {
+		normals = generateNormals(vertices, faces);
 	}
 
 	m_geomRoot = std::make_shared<sg::GroupNode>();
@@ -154,4 +159,43 @@ sg::GeometryNode* MeshManager::createGeometryNode(
 	geom->addChild(new sg::IndexNode(indices));
 
 	return geom;
+}
+
+std::shared_ptr<GenericDataArray<float> > MeshManager::generateNormals(
+	std::shared_ptr<GenericDataArray<float> > vertices,
+	std::shared_ptr<GenericDataArray<unsigned int> > indices)
+{
+	std::vector<glm::vec3> normalsVec(vertices->length());
+	std::shared_ptr<GenericDataArray<float> > normals = std::make_shared<GenericDataArray<float> >(vertices->length());
+
+	for (unsigned int i = 0; i < indices->length(); ++i) {
+		unsigned int vertexIndex = indices->at(i, 0);
+		glm::vec3 vertex1(vertices->at(vertexIndex, 0), vertices->at(vertexIndex, 1), vertices->at(vertexIndex, 2));
+
+		vertexIndex = indices->at(i, 1);
+		glm::vec3 vertex2(vertices->at(vertexIndex, 0), vertices->at(vertexIndex, 1), vertices->at(vertexIndex, 2));
+
+		vertexIndex = indices->at(i, 2);
+		glm::vec3 vertex3(vertices->at(vertexIndex, 0), vertices->at(vertexIndex, 1), vertices->at(vertexIndex, 2));
+
+		glm::vec3 edge1 = vertex2 - vertex1;
+		glm::vec3 edge2 = vertex3 - vertex1;
+
+		glm::vec3 normal = glm::normalize(glm::cross(edge1, edge2));
+
+		for (unsigned int j = 0; j < 3; ++j) {
+			if (normalsVec.at(indices->at(i, j)) != glm::vec3()) {
+				normalsVec.at(indices->at(i, j)) = glm::normalize(normalsVec.at(indices->at(i, j)) + normal);
+			}
+			else {
+				normalsVec.at(indices->at(i, j)) = normal;
+			}
+		}
+	}
+
+	for (unsigned int i = 0; i < normalsVec.size(); ++i) {
+		normals->at(i) = GenericDataArray<float>::value_type(&normalsVec[i][0]);
+	}
+
+	return normals;
 }

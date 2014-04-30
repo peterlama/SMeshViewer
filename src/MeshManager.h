@@ -42,10 +42,19 @@ class MeshManager
 public:
 	MeshManager();
 
+	/**
+	* Imports triangle meshes from a .obj file
+	*/
 	bool importObjMesh(const char* filename);
 	
 	std::shared_ptr<sg::GroupNode> geometryRootNode();
 
+	/**
+	* Generate averaged normals
+	*/
+	static std::shared_ptr<GenericDataArray<float> > generateNormals(
+		std::shared_ptr<GenericDataArray<float> > vertices,
+		std::shared_ptr<GenericDataArray<unsigned int> > indices);
 private:
 	sg::GeometryNode* createGeometryNode(
 		std::shared_ptr<GenericDataArray<float> > vertices,
