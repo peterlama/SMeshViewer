@@ -95,7 +95,7 @@ void Renderer::setVertices(std::shared_ptr<GenericDataArray<float> > vertices)
     }
     else {
 		m_renderState.top().numVertices = vertices->length();
-		m_renderState.top().vertexBufferHandle = uploadVertices(vertices);
+		m_renderState.top().vertexBufferHandle = uploadArray(vertices);
 		
     }
 }
@@ -109,7 +109,7 @@ void Renderer::setNormals(std::shared_ptr<GenericDataArray<float> > normals)
 	}
 	else {
 		m_renderState.top().numNormals = normals->length();
-		m_renderState.top().normalBufferHandle = uploadVertices(normals);
+		m_renderState.top().normalBufferHandle = uploadArray(normals);
 	}
 }
 
@@ -242,13 +242,13 @@ void Renderer::renderTriangles()
 	glUseProgram(0);
 }
 
-GLuint Renderer::uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices)
+GLuint Renderer::uploadArray(std::shared_ptr<GenericDataArray<float> > data)
 {
     GLuint handle;
     glGenBuffers(1, &handle);
     
     glBindBuffer(GL_ARRAY_BUFFER, handle);
-    glBufferData(GL_ARRAY_BUFFER, vertices->byteSize(), vertices->rawData(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, data->byteSize(), data->rawData(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     
     return handle;

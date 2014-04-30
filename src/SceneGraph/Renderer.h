@@ -91,7 +91,7 @@ public:
 	void clearScreen();
 	void renderTriangles();
 private:
-    GLuint uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices);
+    GLuint uploadArray(std::shared_ptr<GenericDataArray<float> > data);
 
 	bool cacheHasEntry(int key);
 	RenderStateSet& cacheGet(int key);
