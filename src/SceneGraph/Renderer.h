@@ -58,6 +58,10 @@ public:
 	GLuint programHandle;
 };
 
+/**
+* Class for encapsulating OpenGL rendering funcionality. 
+* For portablility, scene graph nodes should not use OpenGL rendering commands directly 
+*/
 class Renderer
 {
 public:

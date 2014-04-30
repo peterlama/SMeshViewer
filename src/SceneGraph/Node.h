@@ -27,6 +27,10 @@ namespace sg {
    
 class Renderer;
 
+/**
+* Base class for all scene graph nodes.
+* For nodes that can have children, see GroupNode.
+*/
 class Node 
 {
 public:
@@ -38,7 +42,13 @@ public:
     Node* parent();
 	void setParent(Node* parent);
 
+	/**
+	* Called once before render. By default, does nothing.
+	*/
 	virtual void renderInit(Renderer* renderer);
+	/**
+	* All subclasses must define how to render themselves.
+	*/
     virtual void render(Renderer* renderer) = 0;
 
 protected:

@@ -26,7 +26,10 @@
 #include "GroupNode.h"
 
 namespace sg {
-    
+
+/**
+* Children of this node define the geometry
+*/
 class GeometryNode: public GroupNode
 {
 public:

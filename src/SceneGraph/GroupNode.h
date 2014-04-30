@@ -28,7 +28,10 @@
 #include "Node.h"
 
 namespace sg {
-    
+
+/**
+* Base class for all nodes that can have children
+*/
 class GroupNode: public Node
 {
 public:
