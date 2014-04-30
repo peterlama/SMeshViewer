@@ -37,7 +37,7 @@ public:
     Node* nthChild(int n);
     void addChild(Node* child);
     void removeChild(Node* child);
-    void replaceChild(Node* child);
+    void replaceChild(Node* oldChild, Node* newChild);
     
 	virtual void renderInit(Renderer* renderer);
     virtual void render(Renderer* renderer);

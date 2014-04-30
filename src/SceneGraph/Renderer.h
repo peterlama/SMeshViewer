@@ -61,7 +61,7 @@ public:
 class Renderer
 {
 public:
-	static Renderer* instance();
+	Renderer();
 
 	void push(int nodeId);
 	void pop();
@@ -87,9 +87,7 @@ public:
 	void clearScreen();
 	void renderTriangles();
 private:
-	Renderer();
-
-	GLuint uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices);
+    GLuint uploadVertices(std::shared_ptr<GenericDataArray<float> > vertices);
 
 	bool cacheHasEntry(int key);
 	RenderStateSet& cacheGet(int key);

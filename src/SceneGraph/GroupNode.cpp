@@ -56,11 +56,13 @@ void GroupNode::removeChild(Node* child)
 	setNeedsRendering(true);
 }
 
-void GroupNode::replaceChild(Node* child)
+void GroupNode::replaceChild(Node* oldChild, Node* newChild)
 {
-    std::vector<Node*>::iterator it = std::find(m_children.begin(), m_children.end(), child);
-    *it = child;
-	setNeedsRendering(true);
+    std::vector<Node*>::iterator it = std::find(m_children.begin(), m_children.end(), oldChild);
+	if (it != m_children.end()) {
+		*it = newChild;
+		setNeedsRendering(true);
+	}
 }
 
 void GroupNode::renderInit(Renderer* renderer)

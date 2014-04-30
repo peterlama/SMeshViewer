@@ -66,14 +66,17 @@ void MainWindow::fileOpen()
 	if (!filename.isNull()) {
 		statusBar()->showMessage(tr("Loading..."));
 
+		std::shared_ptr<sg::GroupNode> geomRoot = m_meshManager.geometryRootNode();
 		m_meshManager.importObjMesh(filename.toLatin1());
-		sg::SceneGraph scene;
-		scene.addDefaultCamera();
-		scene.addDefaultLights();
-		scene.root()->addChild(m_meshManager.geometryRootNode());
+		
+		if (geomRoot->hasChildren()) {
+			m_view3d->sceneGraphRoot()->replaceChild(geomRoot.get(), m_meshManager.geometryRootNode().get());
+		}
+		else {
+			m_view3d->sceneGraphRoot()->addChild(m_meshManager.geometryRootNode().get());
+		}
 
-		m_view3d->setSceneGraph(scene);
-		m_view3d->update();
+		m_view3d->updateGL();
 
 		statusBar()->showMessage(tr("Done"), 2000);
 	}

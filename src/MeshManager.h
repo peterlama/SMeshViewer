@@ -44,7 +44,7 @@ public:
 
 	bool importObjMesh(const char* filename);
 	
-	sg::GroupNode* geometryRootNode();
+	std::shared_ptr<sg::GroupNode> geometryRootNode();
 
 private:
 	sg::GeometryNode* createGeometryNode(
@@ -52,7 +52,7 @@ private:
 		std::shared_ptr<GenericDataArray<float> > normals,
 		std::shared_ptr<GenericDataArray<unsigned int> > indices);
 
-	sg::GroupNode* m_geomRoot;
+	std::shared_ptr<sg::GroupNode> m_geomRoot;
 };
 
 #endif // MESH_MANAGER_H

@@ -46,9 +46,8 @@ public:
 	void addDefaultCamera();
 	void addDefaultLights();
 
-	void renderInit();
-	void render();
-	void resizeViewport(unsigned int width, unsigned int height);
+	void renderInit(Renderer* renderer);
+	void render(Renderer* renderer);
 
 private:
 	std::shared_ptr<GroupNode> m_root;

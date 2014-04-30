@@ -75,21 +75,14 @@ void SceneGraph::addDefaultLights()
 	m_root->addChild(new LightDirectionalNode(lightTransform, glm::vec3(0.1f, 0.1f, 0.1f)));
 }
 
-void SceneGraph::renderInit()
+void SceneGraph::renderInit(Renderer* renderer)
 {
-	Renderer::instance()->init();
-	m_root->renderInit(Renderer::instance());
+	m_root->renderInit(renderer);
 }
 
-void SceneGraph::render()
+void SceneGraph::render(Renderer* renderer)
 {
-	Renderer::instance()->clearScreen();
-	m_root->render(Renderer::instance());
-}
-
-void SceneGraph::resizeViewport(unsigned int width, unsigned int height)
-{
-	Renderer::instance()->resizeViewport(width, height);
+	m_root->render(renderer);
 }
 
 } //namespace sg

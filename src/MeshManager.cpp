@@ -39,7 +39,7 @@
 
 MeshManager::MeshManager()
 {
-	m_geomRoot = new sg::GroupNode;
+	m_geomRoot = std::make_shared<sg::GroupNode>();
 }
 
 bool MeshManager::importObjMesh(const char* filename)
@@ -126,8 +126,7 @@ bool MeshManager::importObjMesh(const char* filename)
 		}
 	}
 
-	delete m_geomRoot;
-	m_geomRoot = new sg::GroupNode;
+	m_geomRoot = std::make_shared<sg::GroupNode>();
 	m_geomRoot->addChild(createGeometryNode(vertices, normals, faces));
 
 	std::cout << "Time: " << timer.elapsed() / 1000.0 << std::endl;
@@ -138,7 +137,7 @@ bool MeshManager::importObjMesh(const char* filename)
 
 }
 
-sg::GroupNode* MeshManager::geometryRootNode()
+std::shared_ptr<sg::GroupNode> MeshManager::geometryRootNode()
 {
 	return m_geomRoot;
 }

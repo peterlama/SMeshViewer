@@ -31,8 +31,7 @@
 #include "GenericDataArray.h"
 #include "SceneGraph.h"
 #include "ViewNavigator.h"
-
-class Mesh;
+#include "Renderer.h"
 
 class View3d : public QGLWidget 
 {
@@ -43,7 +42,7 @@ public:
     QSize sizeHint() const;
 
 	ViewNavigator* viewNav();
-	void update();
+	std::shared_ptr<sg::GroupNode> sceneGraphRoot();
 	void setSceneGraph(const sg::SceneGraph& sceneGraph);
 
 protected:
@@ -60,5 +59,6 @@ private:
 
 	ViewNavigator m_viewNav;
 
+	sg::Renderer m_renderer;
 	sg::SceneGraph m_sceneGraph;
 };

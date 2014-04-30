@@ -58,6 +58,9 @@ View3d::View3d(const QGLFormat &format, QWidget *parent)
 	{
 		std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
 	}
+
+	m_sceneGraph.addDefaultCamera();
+	m_sceneGraph.addDefaultLights();
 }
 
 View3d::~View3d()
@@ -77,31 +80,33 @@ ViewNavigator* View3d::viewNav()
 	return &m_viewNav;
 }
 
-void View3d::update()
+std::shared_ptr<sg::GroupNode> View3d::sceneGraphRoot()
 {
-	updateSceneGraph();
-	updateGL();
+	return m_sceneGraph.root();
 }
 
 void View3d::setSceneGraph(const sg::SceneGraph& sceneGraph)
 {
 	m_sceneGraph = sceneGraph;
+	m_renderer.reset();
 }
 
 void View3d::initializeGL()
 {
-	m_sceneGraph.renderInit();
+	m_renderer.init();
+	m_sceneGraph.renderInit(&m_renderer);
 }
 
 void View3d::paintGL()
 {
 	updateSceneGraph();
-	m_sceneGraph.render();
+	m_renderer.clearScreen();
+	m_sceneGraph.render(&m_renderer);
 }
 
 void View3d::resizeGL(int width, int height)
 {
-	m_sceneGraph.resizeViewport(width, height);
+	m_renderer.resizeViewport(width, height);
 }
 
 void View3d::mousePressEvent(QMouseEvent* event)

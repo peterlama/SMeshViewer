@@ -43,12 +43,6 @@ Renderer::Renderer()
 	m_defaultShaderProgram = ShaderProgramGL::default();
 }
 
-Renderer* Renderer::instance()
-{
-	static Renderer renderer;
-	return &renderer;
-}
-
 void Renderer::push(int nodeId)
 {
 	RenderStateSet stateSet;
@@ -71,7 +65,8 @@ void Renderer::pop()
 
 void Renderer::reset()
 {
-    //m_vertexBufferHandle = 0;
+	m_cache.clear();
+	m_directionalLights.clear();
 }
 
 void Renderer::pushMatrix(const glm::mat4& matrix) 
